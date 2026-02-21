@@ -1,0 +1,60 @@
+spring:
+  application:
+    name: {{projectName}}
+
+{{#if hasJpa}}  datasource:
+    url: jdbc:postgresql://localhost:5432/{{projectName}}
+    username: ${DB_USERNAME:app}
+    password: ${DB_PASSWORD:secret}
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+{{/if}}
+
+{{#if hasMongo}}  data:
+    mongodb:
+      uri: ${MONGODB_URI:mongodb://localhost:27017/{{projectName}}}
+{{/if}}
+
+{{#if hasDockerCompose}}  docker:
+    compose:
+      enabled: true
+      lifecycle-management: start-and-stop
+{{/if}}
+
+  threads:
+    virtual:
+      enabled: true        # Project Loom virtual threads
+
+server:
+  port: 8080
+  shutdown: graceful
+
+{{#if hasActuator}}management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus,traces
+  tracing:
+    sampling:
+      probability: 1.0
+  otlp:
+    metrics:
+      export:
+        url: ${OTEL_EXPORTER_OTLP_METRICS_ENDPOINT:http://localhost:4318/v1/metrics}
+    tracing:
+      endpoint: ${OTEL_EXPORTER_OTLP_TRACES_ENDPOINT:http://localhost:4318/v1/traces}
+{{/if}}
+
+logging:
+  level:
+    root: INFO
+    {{packageName}}: DEBUG

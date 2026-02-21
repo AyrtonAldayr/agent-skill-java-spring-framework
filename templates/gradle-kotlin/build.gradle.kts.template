@@ -1,0 +1,113 @@
+import org.springframework.boot.gradle.tasks.bundling.BootJar
+
+plugins {
+    java
+    id("org.springframework.boot")          version "{{bootVersion}}"
+    id("io.spring.dependency-management")   version "1.1.7"
+{{#if hasNative}}    id("org.graalvm.buildtools.native")     version "0.10.4"
+{{/if}}}
+
+group   = "{{packageName}}"
+version = "0.0.1-SNAPSHOT"
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of({{javaVersion}})
+    }
+}
+
+{{#if enablePreview}}
+tasks.withType<JavaCompile> {
+    options.compilerArgs.addAll(listOf("--enable-preview"))
+}
+
+tasks.withType<Test> {
+    jvmArgs("--enable-preview")
+    useJUnitPlatform()
+}
+
+tasks.named<BootJar>("bootJar") {
+    jvmArguments.addAll(listOf("--enable-preview"))
+}
+{{/if}}
+{{#if !enablePreview}}
+tasks.withType<Test> {
+    useJUnitPlatform()
+}
+{{/if}}
+
+repositories {
+    mavenCentral()
+}
+
+{{#if hasModulith}}
+dependencyManagement {
+    imports {
+        mavenBom("org.springframework.modulith:spring-modulith-bom:2.0.3")
+    }
+}
+{{/if}}
+
+dependencies {
+    // --- Web ---
+{{#if hasWebFlux}}    implementation("org.springframework.boot:spring-boot-starter-webflux")
+{{/if}}
+{{#if !hasWebFlux}}    implementation("org.springframework.boot:spring-boot-starter-web")
+{{/if}}
+
+    // --- Data ---
+{{#if hasJpa}}    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.springframework.boot:spring-boot-starter-jdbc")
+{{/if}}
+{{#if hasMongo}}    implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
+{{/if}}
+    {{dbDependency}}
+
+    // --- Validation ---
+{{#if hasValidation}}    implementation("org.springframework.boot:spring-boot-starter-validation")
+{{/if}}
+
+    // --- Security ---
+{{#if hasSecurity}}    implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
+{{/if}}
+
+    // --- Observability ---
+{{#if hasActuator}}    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("io.micrometer:micrometer-tracing-bridge-otel")
+    implementation("io.opentelemetry:opentelemetry-exporter-otlp")
+    runtimeOnly("io.micrometer:micrometer-registry-prometheus")
+{{/if}}
+
+    // --- Null Safety (JSpecify) ---
+    implementation("org.jspecify:jspecify:1.0.0")
+
+{{#if hasModulith}}    // --- Spring Modulith ---
+    implementation("org.springframework.modulith:spring-modulith-starter-core")
+    {{modulithDataDep}}
+{{/if}}
+
+    // --- Dev Tools ---
+    developmentOnly("org.springframework.boot:spring-boot-devtools")
+    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+
+    // --- Testing ---
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+{{#if hasSecurity}}    testImplementation("org.springframework.security:spring-security-test")
+{{/if}}
+{{#if hasModulith}}    testImplementation("org.springframework.modulith:spring-modulith-starter-test")
+{{/if}}
+{{#if hasJpa}}    testImplementation("org.testcontainers:postgresql")
+    testImplementation("org.testcontainers:junit-jupiter")
+{{/if}}
+}
+{{#if hasNative}}
+graalvmNative {
+    binaries {
+        named("main") {
+            imageName.set("{{projectName}}")
+            buildArgs.add("--enable-preview")
+        }
+    }
+}
+{{/if}}

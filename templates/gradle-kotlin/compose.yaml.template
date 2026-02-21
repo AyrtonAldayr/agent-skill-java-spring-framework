@@ -1,0 +1,40 @@
+services:
+{{#if hasJpa}}  postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: {{projectName}}
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: secret
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U app"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+{{/if}}
+
+{{#if hasMongo}}  mongodb:
+    image: mongo:7.0
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: {{projectName}}
+    volumes:
+      - mongodata:/data/db
+{{/if}}
+
+{{#if hasActuator}}  otel-collector:
+    image: otel/opentelemetry-collector-contrib:latest
+    ports:
+      - "4317:4317"   # gRPC
+      - "4318:4318"   # HTTP
+{{/if}}
+
+volumes:
+{{#if hasJpa}}  pgdata:
+{{/if}}
+{{#if hasMongo}}  mongodata:
+{{/if}}
