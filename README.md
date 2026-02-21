@@ -70,7 +70,26 @@ After answering a few prompts, you get a complete project with:
 
 Install the skill to get AI assistance aligned with Spring Boot 4 / Framework 7 standards.
 
-### Install from GitHub
+There are **two common ways** to install it, depending on which tool you use:
+
+### Option 1 — npx (Skills CLI, multi-agent)
+
+Uses the open [Skills CLI](https://github.com/vercel-labs/skills) (`npx skills`). Works with Claude Code, Cursor, Codex, and other agents that follow the same skill layout.
+
+```bash
+# Install the skill (prompts for which agent(s) to install to)
+npx skills add AyrtonAldayr/agent-skill-java-spring-framework --skill java-spring-framework
+
+# Install only for Claude Code
+npx skills add AyrtonAldayr/agent-skill-java-spring-framework --skill java-spring-framework -a claude-code
+
+# Install for Cursor
+npx skills add AyrtonAldayr/agent-skill-java-spring-framework --skill java-spring-framework -a cursor
+```
+
+### Option 2 — Claude Code official CLI
+
+If you use the `claude` CLI (Anthropic’s Claude Code), you can install directly from GitHub:
 
 ```bash
 claude skills install github:AyrtonAldayr/agent-skill-java-spring-framework

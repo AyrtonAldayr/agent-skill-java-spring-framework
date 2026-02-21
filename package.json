@@ -4,7 +4,7 @@
   "description": "Interactive CLI scaffold for Java 25 / Spring Boot 4.x projects — with a bundled Claude Code skill for AI-assisted development.",
   "type": "module",
   "bin": {
-    "spring-boot4-skill": "./bin/create-spring-app.js"
+    "spring-boot4-skill": "bin/create-spring-app.js"
   },
   "scripts": {
     "start": "node bin/create-spring-app.js",
