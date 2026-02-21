@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 /**
- * create-spring-boot4 — Interactive CLI scaffolder
+ * spring-boot4-skill — Interactive CLI scaffolder
  * Spring Boot 4.x / Spring Framework 7.x / Java 25 (2026 standards)
+ * Author: AyrtonAldayr — https://github.com/AyrtonAldayr/agent-skill-java-spring-framework
  */
 
 import { program } from 'commander';
@@ -23,7 +24,7 @@ console.log(
 );
 
 program
-  .name('create-spring-boot4')
+  .name('spring-boot4-skill')
   .description('Scaffold a Spring Boot 4.x / Java 25 project with 2026 best practices')
   .version(pkg.version)
   .argument('[project-name]', 'Project name (skips the prompt)')

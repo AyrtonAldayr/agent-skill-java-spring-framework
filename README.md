@@ -1,12 +1,13 @@
 # Spring Boot 4 · Java 25 · Spring Framework 7
 
 > **2026-standard** project scaffolder + Claude Code AI skill for Java / Spring development.
+> By [AyrtonAldayr](https://github.com/AyrtonAldayr)
 
-This repository provides two things in one:
+This repository provides two tools in one:
 
 | Tool | What it does |
 |---|---|
-| **`npx create-spring-boot4`** | Interactive CLI that generates a production-ready Spring Boot 4 project |
+| **`npx spring-boot4-skill`** | Interactive CLI that generates a production-ready Spring Boot 4 project |
 | **Claude Code skill** | AI assistant trained on Spring Boot 4 / Framework 7 / Java 25 standards |
 
 ---
@@ -14,13 +15,22 @@ This repository provides two things in one:
 ## Quick Start — Project Scaffolder
 
 ```bash
-npx create-spring-boot4
+npx spring-boot4-skill
 ```
 
-Or to skip the name prompt:
+Or providing the project name directly:
 
 ```bash
-npx create-spring-boot4 my-service
+npx spring-boot4-skill my-service
+```
+
+Non-interactive (use all defaults):
+
+```bash
+npx spring-boot4-skill my-service --no-interactive
+
+# Maven instead of Gradle
+npx spring-boot4-skill my-service --maven
 ```
 
 ### What it generates
@@ -60,17 +70,10 @@ After answering a few prompts, you get a complete project with:
 
 Install the skill to get AI assistance aligned with Spring Boot 4 / Framework 7 standards.
 
-### Install from GitHub (recommended)
+### Install from GitHub
 
 ```bash
-claude skills install github:<your-username>/agent-skill-java-spring-framework
-```
-
-### Install from `.skill` file
-
-```bash
-# Download the latest release
-claude skills install java-spring-framework.skill
+claude skills install github:AyrtonAldayr/agent-skill-java-spring-framework
 ```
 
 ### What the skill does
@@ -113,20 +116,14 @@ Once installed, Claude Code acts as a **Senior Spring Boot 4 architect**:
 ## Publishing to npm
 
 ```bash
-# 1. Update package.json with your npm username/org
-# 2. Login to npm
 npm login
-
-# 3. Publish
 npm publish --access public
 ```
 
 After publishing, developers can use:
 
 ```bash
-npx create-spring-boot4
-# or
-npx @your-org/create-spring-boot4
+npx spring-boot4-skill
 ```
 
 ---

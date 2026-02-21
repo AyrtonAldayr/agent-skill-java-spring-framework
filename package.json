@@ -1,10 +1,10 @@
 {
-  "name": "create-spring-boot4",
+  "name": "spring-boot4-skill",
   "version": "1.0.0",
   "description": "Interactive CLI scaffold for Java 25 / Spring Boot 4.x projects — with a bundled Claude Code skill for AI-assisted development.",
   "type": "module",
   "bin": {
-    "create-spring-boot4": "./bin/create-spring-app.js"
+    "spring-boot4-skill": "./bin/create-spring-app.js"
   },
   "scripts": {
     "start": "node bin/create-spring-app.js",
@@ -19,10 +19,19 @@
     "generator",
     "spring-modulith",
     "graalvm",
-    "jakarta"
+    "jakarta",
+    "claude-skill"
   ],
-  "author": "",
+  "author": "AyrtonAldayr",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AyrtonAldayr/agent-skill-java-spring-framework.git"
+  },
+  "homepage": "https://github.com/AyrtonAldayr/agent-skill-java-spring-framework#readme",
+  "bugs": {
+    "url": "https://github.com/AyrtonAldayr/agent-skill-java-spring-framework/issues"
+  },
   "engines": {
     "node": ">=20.0.0"
   },
