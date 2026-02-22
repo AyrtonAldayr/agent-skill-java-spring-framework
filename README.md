@@ -3,7 +3,7 @@
 [![npm version](https://img.shields.io/npm/v/spring-boot4-skill.svg)](https://www.npmjs.com/package/spring-boot4-skill)
 
 > **2026-standard** project scaffolder + Claude Code AI skill for Java / Spring development.
-> By [AyrtonAldayr](https://github.com/AyrtonAldayr) · **v1.2.0**
+> By [AyrtonAldayr](https://github.com/AyrtonAldayr) · **v1.3.0**
 
 This repository provides two tools in one:
 
@@ -134,7 +134,7 @@ Once installed, Claude Code acts as a **Senior Spring Boot 4 architect**:
 | File | Contents |
 |---|---|
 | `skills/java-spring-framework/references/spring-framework-7.md` | All Spring 7 APIs with code examples |
-| `skills/java-spring-framework/references/spring-boot-4.md` | Boot 4: native, virtual threads, testing (Testcontainers), reactive stack |
+| `skills/java-spring-framework/references/spring-boot-4.md` | Boot 4: native, virtual threads, testing (Testcontainers), reactive stack, rate limiting, connection pools, caching, performance |
 | `skills/java-spring-framework/references/spring-security-7.md` | OAuth2 Resource Server, JWT, method security, CORS |
 | `skills/java-spring-framework/references/spring-messaging.md` | Kafka, event-driven, @KafkaListener, producer/consumer |
 | `skills/java-spring-framework/references/spring-modulith.md` | Module structure, events, integration testing, common pitfalls |

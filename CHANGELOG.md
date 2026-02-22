@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2026-02-21
+
+### Added
+
+- **Skill:** spring-boot-4.md: new section 12 (Rate limiting — Bucket4j, time-window vs @ConcurrencyLimit) and section 13 (Resources & performance — HikariCP/R2DBC pools, Actuator pool metrics, Caffeine cache, performance tuning summary).
+- **Skill:** SKILL.md Reference Files "Load when" extended for rate limiting, connection pools, resource metrics, caching, performance tuning; Quick decision mermaid node for "Rate limit / resources / performance?".
+- **Skill:** spring-framework-7.md Resilience section: note linking to spring-boot-4.md for time-window rate limiting.
+- **README:** Skill reference table: spring-boot-4.md description now includes rate limiting, connection pools, caching, performance.
+
+[1.3.0]: https://github.com/AyrtonAldayr/agent-skill-java-spring-framework/compare/v1.2.0...v1.3.0
+
 ## [1.2.0] - 2026-02-21
 
 ### Added

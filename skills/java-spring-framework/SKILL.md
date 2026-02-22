@@ -42,6 +42,8 @@ flowchart TD
     K -->|Yes| L[troubleshooting-migration.md]
     A --> M{Messaging / Kafka?}
     M -->|Yes| N[spring-messaging.md]
+    A --> O{Rate limit / resources / performance?}
+    O -->|Yes| P[spring-boot-4.md]
 ```
 
 ## Mandatory Workflow
@@ -79,7 +81,7 @@ Load these as needed — do not load all at once:
 | Topic | File | Load when |
 |---|---|---|
 | Spring Framework 7 APIs | `references/spring-framework-7.md` | Framework-level features: versioning, resilience, JSpecify, SpEL, streaming |
-| Spring Boot 4 features | `references/spring-boot-4.md` | Boot auto-config, Actuator, native images, testing, virtual threads |
+| Spring Boot 4 features | `references/spring-boot-4.md` | Boot auto-config, Actuator, native images, testing, virtual threads, rate limiting, connection pools, resource metrics, caching, performance tuning |
 | Spring Security 7 | `references/spring-security-7.md` | OAuth2 Resource Server, JWT, method security, CORS, authentication/authorization |
 | Messaging (Kafka) | `references/spring-messaging.md` | Kafka, event-driven, messaging, @KafkaListener, producer/consumer |
 | Spring Modulith | `references/spring-modulith.md` | Domain-driven module design, event-driven architecture |

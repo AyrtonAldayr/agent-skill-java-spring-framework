@@ -16,6 +16,8 @@
 9. [Docker Compose Support](#9-docker-compose-support)
 10. [Spring Security 7 Basics](#10-spring-security-7-basics)
 11. [Reactive Stack (R2DBC + WebFlux)](#11-reactive-stack-r2dbc--webflux)
+12. [Rate Limiting](#12-rate-limiting)
+13. [Resources & Performance](#13-resources--performance)
 
 ---
 
@@ -446,3 +448,153 @@ Use `Netty` as the default server (Boot chooses it when `spring-boot-starter-web
 ### R2DBC repositories and WebFlux controllers
 
 Define reactive repositories (`ReactiveCrudRepository`) and inject them into `@RestController` or handler functions. Use `ServerWebExchange`, `Mono`, and `Flux` for reactive types. For **RestClient** in a reactive app, use the reactive variant and streaming; see `references/spring-framework-7.md` (Streaming Support) for alignment with Spring 7 APIs.
+
+---
+
+## 12. Rate Limiting
+
+**Concurrency vs time-based:** For **limiting concurrent calls per method**, use Spring 7’s built-in `@ConcurrencyLimit(maxConcurrentCalls = N)` — see `references/spring-framework-7.md` (Resilience Annotations). For **rate limiting by time window** (e.g. 100 requests per minute per IP or per user), use an in-app filter/interceptor with a token-bucket implementation or a gateway.
+
+### Time-based rate limit (in application)
+
+Use **Bucket4j** (token bucket) with a key per client (e.g. IP or authenticated user). Apply it in a `Filter` or `HandlerInterceptor` and return `429 Too Many Requests` when the bucket is exhausted.
+
+**Dependency:**
+
+```kotlin
+// build.gradle.kts
+implementation("com.bucket4j:bucket4j-core:8.10.1")
+```
+
+**Example: filter keyed by IP**
+
+```java
+import io.github.bucket4j.Bandwidth;
+import io.github.bucket4j.Bucket;
+import io.github.bucket4j.Refill;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
+
+import java.io.IOException;
+import java.time.Duration;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+@Component
+@Order(1)
+public class RateLimitFilter extends OncePerRequestFilter {
+
+    private final Map<String, Bucket> buckets = new ConcurrentHashMap<>();
+    private static final int CAPACITY = 100;
+    private static final Duration REFILL_DURATION = Duration.ofMinutes(1);
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+                                    FilterChain filterChain) throws ServletException, IOException {
+        String key = clientKey(request); // e.g. request.getRemoteAddr() or principal name
+        Bucket bucket = buckets.computeIfAbsent(key, k -> newBucket());
+        if (bucket.tryConsume(1)) {
+            filterChain.doFilter(request, response);
+        } else {
+            response.setStatus(HttpServletResponse.SC_TOO_MANY_REQUESTS);
+            response.getWriter().write("Rate limit exceeded");
+        }
+    }
+
+    private static String clientKey(HttpServletRequest request) {
+        return request.getRemoteAddr();
+    }
+
+    private static Bucket newBucket() {
+        Bandwidth limit = Bandwidth.classic(CAPACITY, Refill.greedy(CAPACITY, REFILL_DURATION));
+        return Bucket.builder().addLimit(limit).build();
+    }
+}
+```
+
+For **per-user** limits, use a key derived from `SecurityContextHolder.getContext().getAuthentication()` (e.g. principal name) and exempt unauthenticated or health endpoints from the filter if needed.
+
+**When to use which:** Use `@ConcurrencyLimit` to cap concurrent executions of a specific method. Use a filter with Bucket4j (or similar) for API-level limits per time window (per IP or per user). If traffic is fronted by **Spring Cloud Gateway**, rate limiting can also be implemented at the edge; that is outside the scope of this reference.
+
+---
+
+## 13. Resources & Performance
+
+### Connection pools (HikariCP, R2DBC)
+
+**HikariCP (blocking JDBC)** — Spring Boot configures it by default. Tune in `application.yaml`:
+
+```yaml
+spring:
+  datasource:
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+```
+
+See [Spring Boot Data Access](https://docs.spring.io/spring-boot/docs/current/reference/html/data.html#data.sql.datasource.hikari) for all options.
+
+**R2DBC** — For reactive apps, configure the connection pool similarly (e.g. `spring.r2dbc.pool.*`). DB health is included in health groups (section 4); use readiness to avoid sending traffic to instances that cannot get a connection.
+
+### Metrics for resources
+
+Actuator exposes **HikariCP** metrics (e.g. `hikaricp.connections.active`, `hikaricp.connections.idle`, `hikaricp.connections.pending`). Use these in Prometheus/Grafana to size pools and alert on exhaustion. R2DBC pool metrics follow a similar pattern when the reactive stack is used.
+
+### Caching
+
+Use **Spring Cache** with **Caffeine** for in-process caching. Reduces repeated work and database load.
+
+**Dependencies:**
+
+```kotlin
+// build.gradle.kts
+implementation("org.springframework.boot:spring-boot-starter-cache")
+implementation("com.github.ben-manes.caffeine:caffeine")
+```
+
+**Enable and configure:**
+
+```java
+@SpringBootApplication
+@EnableCaching
+public class Application { ... }
+```
+
+```yaml
+# application.yaml
+spring:
+  cache:
+    cache-names: products,users
+    caffeine:
+      spec: maximumSize=1000,expireAfterWrite=300s
+```
+
+**Usage:**
+
+```java
+@Service
+public class ProductService {
+
+    @Cacheable(cacheNames = "products", key = "#id")
+    public Product findById(Long id) {
+        return productRepository.findById(id).orElseThrow();
+    }
+}
+```
+
+Use short TTLs or size limits to avoid stale or unbounded caches.
+
+### Performance tuning (summary)
+
+- **Virtual threads** (section 6): Enable for high concurrency with blocking I/O; no need to size a large thread pool.
+- **Pool sizing:** Set HikariCP (or R2DBC pool) size based on observed metrics (connections in use, pending); avoid over-provisioning.
+- **N+1:** Avoid N+1 queries in JPA (e.g. `@EntityGraph`, fetch joins, or DTO projections) so a single request does not open many statements.
+- **Observability:** Use Actuator/Prometheus and traces (section 4) to find bottlenecks (slow endpoints, DB, or external calls) and tune accordingly. No JVM-level tuning (heap, GC) is covered here.

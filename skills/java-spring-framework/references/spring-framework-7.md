@@ -92,6 +92,8 @@ public class PaymentService {
 }
 ```
 
+For **time-window rate limiting** (e.g. requests per minute per IP or user), see `references/spring-boot-4.md` (Rate limiting).
+
 ---
 
 ## 4. Programmatic Bean Registration
