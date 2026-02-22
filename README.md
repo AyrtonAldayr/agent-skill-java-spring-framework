@@ -1,7 +1,9 @@
 # Spring Boot 4 · Java 25 · Spring Framework 7
 
+[![npm version](https://img.shields.io/npm/v/spring-boot4-skill.svg)](https://www.npmjs.com/package/spring-boot4-skill)
+
 > **2026-standard** project scaffolder + Claude Code AI skill for Java / Spring development.
-> By [AyrtonAldayr](https://github.com/AyrtonAldayr) · **v1.1.0**
+> By [AyrtonAldayr](https://github.com/AyrtonAldayr) · **v1.2.0**
 
 This repository provides two tools in one:
 
@@ -43,6 +45,26 @@ After answering a few prompts, you get a complete project with:
 - **`ApplicationTests.java`** — Spring Boot test slice, `WebEnvironment.RANDOM_PORT`
 - **`compose.yaml`** *(optional)* — Docker Compose for PostgreSQL 17, MongoDB 7, OTEL Collector
 - **Spring Modulith module skeleton** *(optional)*
+
+**Example output** (Gradle, default options):
+
+```
+my-service/
+├── build.gradle.kts
+├── settings.gradle.kts
+├── src/
+│   ├── main/
+│   │   ├── java/<package-path>/
+│   │   │   └── Application.java
+│   │   └── resources/
+│   │       └── application.yaml
+│   └── test/
+│       └── java/<package-path>/
+│           └── ApplicationTests.java
+└── compose.yaml          # if Docker Compose was selected
+```
+
+The generator prints the full path of the created project (e.g. `Project created at /path/to/my-service`).
 
 ### Wizard options
 
@@ -114,6 +136,7 @@ Once installed, Claude Code acts as a **Senior Spring Boot 4 architect**:
 | `skills/java-spring-framework/references/spring-framework-7.md` | All Spring 7 APIs with code examples |
 | `skills/java-spring-framework/references/spring-boot-4.md` | Boot 4: native, virtual threads, testing (Testcontainers), reactive stack |
 | `skills/java-spring-framework/references/spring-security-7.md` | OAuth2 Resource Server, JWT, method security, CORS |
+| `skills/java-spring-framework/references/spring-messaging.md` | Kafka, event-driven, @KafkaListener, producer/consumer |
 | `skills/java-spring-framework/references/spring-modulith.md` | Module structure, events, integration testing, common pitfalls |
 | `skills/java-spring-framework/references/build-templates.md` | Complete Gradle KTS + Maven POM templates |
 | `skills/java-spring-framework/references/troubleshooting-migration.md` | Common errors (javax/jakarta, RestTemplate), Boot 3→4 checklist |
@@ -151,12 +174,17 @@ npx spring-boot4-skill
 
 ## Contributing
 
-PRs welcome. Please keep all generated code aligned with:
+PRs welcome.
 
-- [Spring Boot 4.x docs](https://docs.spring.io/spring-boot/)
-- [Spring Framework 7.x docs](https://docs.spring.io/spring-framework/reference/)
-- [Spring Modulith docs](https://docs.spring.io/spring-modulith/reference/)
-- [JSpecify](https://jspecify.dev/)
+1. **Clone and install:** `git clone <repo> && cd agent-skill-java-spring-framework && npm install`
+2. **Run CLI locally:** `node bin/create-spring-app.js [project-name]` or `node bin/create-spring-app.js my-test --no-interactive`
+3. **Tests:** `npm test` (unit tests); `npm run smoke` (CLI smoke test).
+4. **Skill changes:** Keep the structure under `skills/java-spring-framework/` (SKILL.md plus `references/*.md`). Load criteria in the Reference Files table should stay accurate.
+5. **Generated code** must align with:
+   - [Spring Boot 4.x docs](https://docs.spring.io/spring-boot/)
+   - [Spring Framework 7.x docs](https://docs.spring.io/spring-framework/reference/)
+   - [Spring Modulith docs](https://docs.spring.io/spring-modulith/reference/)
+   - [JSpecify](https://jspecify.dev/)
 
 ---
 

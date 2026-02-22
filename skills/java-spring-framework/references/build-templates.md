@@ -276,6 +276,8 @@ dependencies {
 | Micrometer | 1.15.x |
 | io.spring.dependency-management | 1.1.7 |
 
+When updating BOM versions, keep the CLI templates under `templates/` and this reference in sync.
+
 ---
 
 ## 4. Spring Initializr CLI Quick Start

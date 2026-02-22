@@ -1,0 +1,50 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [1.2.0] - 2026-02-21
+
+### Added
+
+- **Docs:** CHANGELOG.md (Keep a Changelog); README "What you get" example tree, expanded Contributing, npm version badge.
+- **CLI:** Project `description` in wizard and in generated Application.java, build.gradle.kts, pom.xml; friendly error messages (EEXIST, EACCES); "Minimal (API only)" option in wizard.
+- **Skill:** New reference `spring-messaging.md` (Kafka, @KafkaListener, producer/consumer); SKILL.md Quick decision node for Messaging/Kafka; Health groups (readiness/liveness) in spring-boot-4.md; BOM sync note in build-templates.md.
+- **Quality:** Jest config and unit tests for templates and buildContext; `scripts/smoke-cli.sh` and `npm run smoke`; `buildContext` exported for tests.
+
+### Changed
+
+- **CLI:** Generator context includes `description` default; success message already showed absolute path.
+
+[1.2.0]: https://github.com/AyrtonAldayr/agent-skill-java-spring-framework/compare/v1.1.0...v1.2.0
+
+## [1.1.0] - 2026-02-21
+
+### Added
+
+- **Skill:** New reference `spring-security-7.md` — OAuth2 Resource Server, JWT, method security (`@PreAuthorize`), CORS.
+- **Skill:** New reference `troubleshooting-migration.md` — common errors (javax/jakarta, RestTemplate, JSpecify, native), Boot 3→4 migration checklist.
+- **Skill:** "When NOT to use this skill" section and Quick decision (mermaid) in SKILL.md.
+- **Skill:** Spring Boot 4 reference: Testcontainers subsection, secure Actuator exposure, Reactive stack (R2DBC + WebFlux), redirect to spring-security-7.md for OAuth2/JWT.
+- **Skill:** Spring Modulith reference: "Common pitfalls" subsection.
+- **Skill:** Spring Framework 7: note for reactive apps (WebFlux + R2DBC) with link to spring-boot-4.md.
+- **README:** Install options for skill via `npx skills add` and `claude skills install`; skill reference table updated.
+
+### Changed
+
+- **Skill:** Reference table in SKILL.md now includes Spring Security 7 and Troubleshooting & migration; triggers listed in body.
+
+## [1.0.0] - 2026-02-21
+
+### Added
+
+- **CLI:** Interactive wizard for project name, package, build tool (Gradle KTS / Maven), Java version (25/21/17), Spring Boot version, database (PostgreSQL, MySQL, MongoDB, H2, None), features (Actuator, Security, Validation, Modulith, Native, WebFlux, Docker Compose), and Java preview features.
+- **CLI:** Non-interactive mode (`--no-interactive`) and Maven option (`--maven`).
+- **Templates:** Gradle Kotlin DSL and Maven POM with Spring Boot 4.0.3 BOM; Application.java with JSpecify `@NullMarked`, application.yaml with virtual threads and OTEL, ApplicationTests, optional compose.yaml and Modulith skeleton.
+- **Skill:** Core SKILL.md with mandatory workflow (Analyze → Implement → Optimize → Document), Core Principles table, and reference files (spring-framework-7, spring-boot-4, spring-modulith, build-templates).
+- **npm:** Package `spring-boot4-skill` publishable with `npx spring-boot4-skill`.
+
+[1.1.0]: https://github.com/AyrtonAldayr/agent-skill-java-spring-framework/compare/v1.0.0...v1.1.0
+[1.0.0]: https://github.com/AyrtonAldayr/agent-skill-java-spring-framework/releases/tag/v1.0.0

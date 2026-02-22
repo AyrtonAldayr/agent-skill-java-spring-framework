@@ -9,6 +9,7 @@ plugins {
 
 group   = "{{packageName}}"
 version = "0.0.1-SNAPSHOT"
+description = "{{description}}"
 
 java {
     toolchain {

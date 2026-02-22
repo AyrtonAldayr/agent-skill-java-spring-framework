@@ -1,6 +1,6 @@
 {
   "name": "spring-boot4-skill",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Interactive CLI scaffold for Java 25 / Spring Boot 4.x projects — with a bundled Claude Code skill for AI-assisted development.",
   "type": "module",
   "bin": {
@@ -8,7 +8,8 @@
   },
   "scripts": {
     "start": "node bin/create-spring-app.js",
-    "test": "node --experimental-vm-modules node_modules/.bin/jest"
+    "test": "node --experimental-vm-modules node_modules/.bin/jest",
+    "smoke": "bash scripts/smoke-cli.sh"
   },
   "keywords": [
     "spring-boot",
@@ -40,5 +41,8 @@
     "commander": "^12.1.0",
     "inquirer": "^10.1.5",
     "ora": "^8.1.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
   }
 }

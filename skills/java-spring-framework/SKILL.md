@@ -40,6 +40,8 @@ flowchart TD
     I -->|Yes| J[build-templates.md]
     A --> K{Migration or errors?}
     K -->|Yes| L[troubleshooting-migration.md]
+    A --> M{Messaging / Kafka?}
+    M -->|Yes| N[spring-messaging.md]
 ```
 
 ## Mandatory Workflow
@@ -79,6 +81,7 @@ Load these as needed — do not load all at once:
 | Spring Framework 7 APIs | `references/spring-framework-7.md` | Framework-level features: versioning, resilience, JSpecify, SpEL, streaming |
 | Spring Boot 4 features | `references/spring-boot-4.md` | Boot auto-config, Actuator, native images, testing, virtual threads |
 | Spring Security 7 | `references/spring-security-7.md` | OAuth2 Resource Server, JWT, method security, CORS, authentication/authorization |
+| Messaging (Kafka) | `references/spring-messaging.md` | Kafka, event-driven, messaging, @KafkaListener, producer/consumer |
 | Spring Modulith | `references/spring-modulith.md` | Domain-driven module design, event-driven architecture |
 | Build templates | `references/build-templates.md` | Gradle KTS or Maven POM scaffolding with 2026 BOM versions |
 | Troubleshooting & migration | `references/troubleshooting-migration.md` | Migration from Boot 3, compile/runtime errors (javax/jakarta, RestTemplate, native, null-safety) |

@@ -201,6 +201,31 @@ management:
 
 Protect actuator in Security 7: allow `health`/`info` for load balancers, require authentication for `metrics`/`prometheus`/`traces`. See `references/spring-security-7.md`.
 
+### Health groups (readiness / liveness)
+
+Customize health groups for Kubernetes or load balancers. Example: a custom "readiness" group that includes DB and a custom indicator:
+
+```yaml
+management:
+  endpoint:
+    health:
+      show-details: when-authorized
+  health:
+    livenessstate:
+      enabled: true
+    readinessstate:
+      enabled: true
+    db:
+      enabled: true
+    group:
+      readiness:
+        include: readinessState,db
+      liveness:
+        include: livenessState
+```
+
+Expose only the group endpoints (e.g. `/actuator/health/readiness`, `/actuator/health/liveness`) in Security 7 for k8s probes.
+
 ### Dependencies (Micrometer + OTEL)
 
 ```kotlin
