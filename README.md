@@ -3,7 +3,7 @@
 [![npm version](https://img.shields.io/npm/v/spring-boot4-skill.svg)](https://www.npmjs.com/package/spring-boot4-skill)
 
 > **2026-standard** project scaffolder + Claude Code AI skill for Java / Spring development.
-> By [AyrtonAldayr](https://github.com/AyrtonAldayr) · **v1.3.0**
+> By [AyrtonAldayr](https://github.com/AyrtonAldayr) · **v1.4.0**
 
 This repository provides two tools in one:
 
@@ -133,10 +133,13 @@ Once installed, Claude Code acts as a **Senior Spring Boot 4 architect**:
 
 | File | Contents |
 |---|---|
-| `skills/java-spring-framework/references/spring-framework-7.md` | All Spring 7 APIs with code examples |
-| `skills/java-spring-framework/references/spring-boot-4.md` | Boot 4: native, virtual threads, testing (Testcontainers), reactive stack, rate limiting, connection pools, caching, performance |
+| `skills/java-spring-framework/references/spring-framework-7.md` | All Spring 7 APIs, Bean Validation, @Valid |
+| `skills/java-spring-framework/references/spring-boot-4.md` | Boot 4: native, virtual threads, testing, reactive stack, rate limiting, connection pools, caching, performance, OpenAPI, scheduling |
 | `skills/java-spring-framework/references/spring-security-7.md` | OAuth2 Resource Server, JWT, method security, CORS |
+| `skills/java-spring-framework/references/spring-redis.md` | Redis, cache distribuido, session store |
+| `skills/java-spring-framework/references/spring-data-mongodb.md` | MongoDB, document DB, Spring Data MongoDB |
 | `skills/java-spring-framework/references/spring-messaging.md` | Kafka, event-driven, @KafkaListener, producer/consumer |
+| `skills/java-spring-framework/references/spring-graphql.md` | GraphQL API, Spring for GraphQL |
 | `skills/java-spring-framework/references/spring-modulith.md` | Module structure, events, integration testing, common pitfalls |
 | `skills/java-spring-framework/references/build-templates.md` | Complete Gradle KTS + Maven POM templates |
 | `skills/java-spring-framework/references/troubleshooting-migration.md` | Common errors (javax/jakarta, RestTemplate), Boot 3→4 checklist |

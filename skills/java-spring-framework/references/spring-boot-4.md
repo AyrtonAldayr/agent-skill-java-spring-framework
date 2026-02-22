@@ -18,6 +18,8 @@
 11. [Reactive Stack (R2DBC + WebFlux)](#11-reactive-stack-r2dbc--webflux)
 12. [Rate Limiting](#12-rate-limiting)
 13. [Resources & Performance](#13-resources--performance)
+14. [API Documentation (OpenAPI / springdoc)](#14-api-documentation-openapi--springdoc)
+15. [Scheduling](#15-scheduling)
 
 ---
 
@@ -598,3 +600,87 @@ Use short TTLs or size limits to avoid stale or unbounded caches.
 - **Pool sizing:** Set HikariCP (or R2DBC pool) size based on observed metrics (connections in use, pending); avoid over-provisioning.
 - **N+1:** Avoid N+1 queries in JPA (e.g. `@EntityGraph`, fetch joins, or DTO projections) so a single request does not open many statements.
 - **Observability:** Use Actuator/Prometheus and traces (section 4) to find bottlenecks (slow endpoints, DB, or external calls) and tune accordingly. No JVM-level tuning (heap, GC) is covered here.
+
+---
+
+## 14. API Documentation (OpenAPI / springdoc)
+
+Use **springdoc-openapi** to expose OpenAPI 3 spec and Swagger UI from your REST controllers. The JSON/YAML spec is consumed by clients and code generators; the UI is useful in development.
+
+**Dependency:**
+
+```kotlin
+// build.gradle.kts
+dependencies {
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")  // align with Boot 4
+}
+```
+
+**application.yaml:**
+
+```yaml
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+```
+
+Document controllers with `@Operation` and `@Parameter`:
+
+```java
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+@RestController
+@RequestMapping("/api/products")
+@Tag(name = "Products", description = "Product API")
+public class ProductController {
+
+    @GetMapping("/{id}")
+    @Operation(summary = "Get product by ID")
+    public Product get(@Parameter(description = "Product ID") @PathVariable String id) {
+        return productService.findById(id);
+    }
+}
+```
+
+The OpenAPI spec is available at `springdoc.api-docs.path` (default `/v3/api-docs`); Swagger UI at `springdoc.swagger-ui.path`. Protect these endpoints in production via Spring Security 7 (e.g. allow only for authenticated users or internal network). See [springdoc documentation](https://springdoc.org/) for grouping, security schemes, and more.
+
+---
+
+## 15. Scheduling
+
+Use `@EnableScheduling` and `@Scheduled` for periodic tasks (cron, fixed rate, or fixed delay).
+
+**Enable scheduling:**
+
+```java
+@SpringBootApplication
+@EnableScheduling
+public class Application { ... }
+```
+
+**Scheduled component:**
+
+```java
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+
+@Component
+public class SyncJob {
+
+    @Scheduled(fixedRate = 60000)  // every 60 seconds
+    public void sync() {
+        // run task
+    }
+
+    @Scheduled(cron = "0 0 * * * *")  // every hour at minute 0
+    public void hourlyReport() {
+        // run task
+    }
+}
+```
+
+With **virtual threads** enabled (section 6), scheduled tasks run on virtual threads when the default task scheduler is used; blocking work in the task does not block platform threads. For a custom `TaskScheduler` (e.g. thread pool size), define a `TaskScheduler` bean and configure as needed. Spring Batch is not covered here; for batch jobs (chunk-based reading/writing), see Spring Batch documentation.

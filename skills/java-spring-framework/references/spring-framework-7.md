@@ -20,6 +20,7 @@ For **reactive applications (WebFlux + R2DBC)**, combine this reference with the
 11. [Enhanced PathPattern](#11-enhanced-pathpattern)
 12. [RestTestClient (Testing)](#12-resttestclient-testing)
 13. [Removed APIs Migration](#13-removed-apis-migration)
+14. [Bean Validation 3.1](#14-bean-validation-31)
 
 ---
 
@@ -316,3 +317,39 @@ class ProductControllerTest {
 | XML Spring MVC config | `WebMvcConfigurer` (Java) |
 | `suffixPatternMatch` | Explicit media types |
 | `trailingSlashMatch` | Explicit URI templates |
+
+---
+
+## 14. Bean Validation 3.1
+
+Spring MVC and WebFlux support **Jakarta Bean Validation 3.1** (Boot 4 brings the dependency). Use `@Valid` (or `@Validated`) on `@RequestBody`, and optionally on `@RequestParam` / path variables with group validation or custom validators.
+
+**DTO with constraints:**
+
+```java
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
+public record CreateUserRequest(
+    @NotBlank(message = "Name is required")
+    @Size(min = 1, max = 100)
+    String name,
+
+    @NotBlank
+    @Email(message = "Must be a valid email")
+    String email
+) {}
+```
+
+**Controller:**
+
+```java
+@PostMapping("/api/users")
+public ResponseEntity<User> create(@Valid @RequestBody CreateUserRequest request) {
+    User user = userService.create(request);
+    return ResponseEntity.status(HttpStatus.CREATED).body(user);
+}
+```
+
+Validation failures trigger `MethodArgumentNotValidException`; handle them in an `@ExceptionHandler` to return 400 with error details. Standard annotations include `@NotNull`, `@NotBlank`, `@Size`, `@Min`, `@Max`, `@Email`, `@Pattern`. For validation groups or custom validators, use `@Validated` with a group class or implement `ConstraintValidator`; see the Bean Validation spec for details.
