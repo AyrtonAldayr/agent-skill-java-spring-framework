@@ -29,7 +29,9 @@ idiomatic for **2026 standards**: Spring Boot 4.0.x, Spring Framework 7.0.x, Jav
 
 ```mermaid
 flowchart TD
-    A[User request] --> W{Architecture / DDD / hexagonal / VSA?}
+    A[User request] --> AA{Spring Cloud / Gateway / Config / Discovery?}
+    AA -->|Yes| AB[spring-cloud.md]
+    A --> W{Architecture / DDD / hexagonal / VSA?}
     W -->|Yes| X[architecture-patterns.md]
     A --> Y{Microservices design?}
     Y -->|Yes| Z[microservices-architecture.md]
@@ -100,5 +102,6 @@ Load these as needed — do not load all at once:
 | Spring Modulith | `references/spring-modulith.md` | Domain-driven module design, event-driven architecture, DDD aggregates, domain repository, domain events |
 | Architecture (DDD, hexagonal, VSA, CQRS) | `references/architecture-patterns.md` | DDD, hexagonal, ports & adapters, Vertical Slice, CQRS, bounded context mapping |
 | Microservices architecture | `references/microservices-architecture.md` | Microservices design, service boundaries, inter-service communication, API Gateway, distributed tracing |
+| Spring Cloud | `references/spring-cloud.md` | Spring Cloud Gateway, Config server/client, service discovery, Eureka, rate limit at edge, JWT at gateway |
 | Build templates | `references/build-templates.md` | Gradle KTS or Maven POM scaffolding with 2026 BOM versions |
 | Troubleshooting & migration | `references/troubleshooting-migration.md` | Migration from Boot 3, compile/runtime errors (javax/jakarta, RestTemplate, native, null-safety) |

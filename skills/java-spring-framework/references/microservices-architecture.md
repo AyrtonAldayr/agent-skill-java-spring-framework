@@ -54,7 +54,7 @@ Start with a **modular monolith** (Modulith) when the domain and team do not cle
 
 An **API Gateway** sits in front of your services and handles routing, authentication/authorization at the edge, rate limiting, and sometimes aggregation. **Spring Cloud Gateway** is the Spring-based option: you configure routes (e.g. by path or host), filters (JWT validation, rate limiting), and point to backend services. Rate limiting at the gateway was mentioned in `references/spring-boot-4.md` (Rate limiting) as an alternative to in-app Bucket4j.
 
-Detailed route and filter configuration is outside this skill; see the [Spring Cloud Gateway documentation](https://docs.spring.io/spring-cloud-gateway/reference/) for setup. Each backend service remains a Spring Boot application with its own security (e.g. OAuth2 Resource Server) as in `references/spring-security-7.md`.
+For examples of routes, filters (strip prefix, headers, rate limit, JWT) and YAML configuration, see `references/spring-cloud.md`. For full route and filter reference, see the [Spring Cloud Gateway documentation](https://docs.spring.io/spring-cloud-gateway/reference/). Each backend service remains a Spring Boot application with its own security (e.g. OAuth2 Resource Server) as in `references/spring-security-7.md`.
 
 ---
 
@@ -68,9 +68,9 @@ Detailed route and filter configuration is outside this skill; see the [Spring C
 
 ## 6. Config and Discovery (Optional)
 
-**Centralized config:** **Spring Cloud Config** can provide configuration (e.g. `application.yaml`) to multiple services from a central server. Use it when you need to change config without redeploying each service. See the [Spring Cloud Config documentation](https://docs.spring.io/spring-cloud-config/reference/) for setup.
+**Centralized config:** **Spring Cloud Config** can provide configuration (e.g. `application.yaml`) to multiple services from a central server. Use it when you need to change config without redeploying each service. For examples of Config server (Git backend) and client bootstrap, see `references/spring-cloud.md`. See the [Spring Cloud Config documentation](https://docs.spring.io/spring-cloud-config/reference/) for full setup.
 
-**Service discovery:** When services need to find each other by name (e.g. “order-service” instead of a fixed URL), use a discovery mechanism (e.g. Consul, Eureka, or Kubernetes services). Spring Cloud supports discovery clients; each service registers itself and resolves others by name. This is optional; you can also use static URLs or a gateway that routes by path.
+**Service discovery:** When services need to find each other by name (e.g. “order-service” instead of a fixed URL), use a discovery mechanism (e.g. Consul, Eureka, or Kubernetes services). Spring Cloud supports discovery clients; each service registers itself and resolves others by name. For Eureka server, client registration, and Gateway with `lb://service-name`, see `references/spring-cloud.md`. This is optional; you can also use static URLs or a gateway that routes by path.
 
 ---
 

@@ -143,6 +143,7 @@ Once installed, Claude Code acts as a **Senior Spring Boot 4 architect**:
 | `skills/java-spring-framework/references/spring-modulith.md` | Module structure, events, integration testing, common pitfalls, DDD & Modulith |
 | `skills/java-spring-framework/references/architecture-patterns.md` | DDD, hexagonal, Vertical Slice, CQRS, ports & adapters |
 | `skills/java-spring-framework/references/microservices-architecture.md` | Microservices: boundaries, communication, API Gateway, distributed observability |
+| `skills/java-spring-framework/references/spring-cloud.md` | Spring Cloud Gateway, Config, service discovery (Eureka); route/filter examples, rate limit, JWT, Config server/client |
 | `skills/java-spring-framework/references/build-templates.md` | Complete Gradle KTS + Maven POM templates |
 | `skills/java-spring-framework/references/troubleshooting-migration.md` | Common errors (javax/jakarta, RestTemplate), Boot 3→4 checklist |
 

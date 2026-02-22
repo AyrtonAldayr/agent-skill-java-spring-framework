@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.7.0] - 2026-02-21
+
+### Added
+
+- **Skill:** New reference `spring-cloud.md` (Spring Cloud 2025.1.x / Oakwood): Gateway with path, strip prefix, headers, rate limit, JWT, and host examples; Config server (Git backend) and client bootstrap; Eureka server, client, and Gateway with `lb://`; optional Spring Cloud Stream pointer.
+- **Skill:** microservices-architecture.md sections 4 and 6 now link to `references/spring-cloud.md` for concrete examples.
+- **Skill:** SKILL.md and README: reference table and Quick decision mermaid updated for Spring Cloud.
+
+[1.7.0]: https://github.com/AyrtonAldayr/agent-skill-java-spring-framework/compare/v1.6.1...v1.7.0
+
 ## [1.6.1] - 2026-02-21
 
 ### Changed
