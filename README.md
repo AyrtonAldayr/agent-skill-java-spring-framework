@@ -140,7 +140,9 @@ Once installed, Claude Code acts as a **Senior Spring Boot 4 architect**:
 | `skills/java-spring-framework/references/spring-data-mongodb.md` | MongoDB, document DB, Spring Data MongoDB |
 | `skills/java-spring-framework/references/spring-messaging.md` | Kafka, event-driven, @KafkaListener, producer/consumer |
 | `skills/java-spring-framework/references/spring-graphql.md` | GraphQL API, Spring for GraphQL |
-| `skills/java-spring-framework/references/spring-modulith.md` | Module structure, events, integration testing, common pitfalls |
+| `skills/java-spring-framework/references/spring-modulith.md` | Module structure, events, integration testing, common pitfalls, DDD & Modulith |
+| `skills/java-spring-framework/references/architecture-patterns.md` | DDD, hexagonal, Vertical Slice, CQRS, ports & adapters |
+| `skills/java-spring-framework/references/microservices-architecture.md` | Microservices: boundaries, communication, API Gateway, distributed observability |
 | `skills/java-spring-framework/references/build-templates.md` | Complete Gradle KTS + Maven POM templates |
 | `skills/java-spring-framework/references/troubleshooting-migration.md` | Common errors (javax/jakarta, RestTemplate), Boot 3→4 checklist |
 
@@ -162,10 +164,24 @@ Once installed, Claude Code acts as a **Senior Spring Boot 4 architect**:
 
 ## Publishing to npm
 
-```bash
-npm login
-npm publish --access public
-```
+When releasing a new version:
+
+1. **Bump version** in `package.json` (e.g. `1.5.0` → `1.6.0`).
+2. **Update CHANGELOG.md** — add an entry under the new version (Added / Changed / Fixed).
+3. **Commit, tag and push:**
+   ```bash
+   git add .
+   git commit -m "chore: release v1.x.0"
+   git tag v1.x.0
+   git push origin main
+   git push origin v1.x.0
+   ```
+   (Or push all tags at once: `git push origin main && git push --tags`.)
+4. **Publish to npm** (requires npm login and 2FA if enabled):
+   ```bash
+   npm login
+   npm publish --access public
+   ```
 
 After publishing, developers can use:
 

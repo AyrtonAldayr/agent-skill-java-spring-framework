@@ -14,6 +14,7 @@
 7. [Module Integration Testing](#7-module-integration-testing)
 8. [Generating Documentation](#8-generating-documentation)
 9. [Common Pitfalls](#9-common-pitfalls)
+10. [DDD & Modulith](#10-ddd--modulith)
 
 ---
 
@@ -231,3 +232,13 @@ Output lands in `target/spring-modulith-docs/` (Maven) or `build/spring-modulith
 | **Forgetting the verification test in CI** | Add the module verification test (section 3) to your CI pipeline so boundary violations are caught on every commit. |
 | **Direct service calls across modules** | One module must not inject another module's service and call it directly. Use `ApplicationEventPublisher` and `@ApplicationModuleListener` (or transactional events) for cross-module communication. |
 | **Putting shared DTOs in one module's internal** | Types used in events or APIs consumed by several modules belong in a `shared/` (or similar) package, not in one module's `internal/`. |
+
+---
+
+## 10. DDD & Modulith
+
+**Aggregate:** An aggregate is a cluster of entities and value objects with a **root entity** that enforces invariants. It is loaded and persisted as a unit. In Modulith, a module usually has one or more aggregates; the module’s public service (e.g. `OrderService`) orchestrates the aggregate: it loads the root via a repository, mutates it, and saves. Example: `Order` as aggregate root; `OrderService.placeOrder(...)` loads or creates an `Order`, applies domain logic, calls `OrderRepository.save(order)`, and publishes events. The repository interface lives in the module API; the implementation (JdbcClient or JPA) lives in `internal/`.
+
+**Domain repository:** A **domain repository** is an interface that exposes only domain operations (e.g. `save(Order)`, `findById(OrderId)`), without infrastructure details. In Spring terms, that interface is the **port**; the implementation in `internal/` (using JdbcClient, JPA, etc.) is the **adapter**. The repository you already use for the module (e.g. `OrderRepository`) acts as the domain repository if it only exposes domain-centric methods and returns domain types or optionals.
+
+**Domain events vs application events:** A **domain event** is something that happened in the domain (e.g. “OrderPlaced”). An **application event** is the mechanism: you publish with `ApplicationEventPublisher` and other modules listen with `@ApplicationModuleListener`. In practice with Modulith, the events you publish between modules are application events that typically **represent** domain events of the publishing module. The payload (e.g. `OrderPlacedEvent`) carries the domain data. Section 5 (Event-Driven Inter-Module Communication) and section 6 (Transactional Event Listeners) describe how to publish and consume these; here we only distinguish: domain event = meaning; application event = Spring’s delivery mechanism.

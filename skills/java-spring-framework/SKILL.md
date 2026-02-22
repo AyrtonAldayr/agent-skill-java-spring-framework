@@ -29,7 +29,11 @@ idiomatic for **2026 standards**: Spring Boot 4.0.x, Spring Framework 7.0.x, Jav
 
 ```mermaid
 flowchart TD
-    A[User request] --> B{REST blocking or reactive?}
+    A[User request] --> W{Architecture / DDD / hexagonal / VSA?}
+    W -->|Yes| X[architecture-patterns.md]
+    A --> Y{Microservices design?}
+    Y -->|Yes| Z[microservices-architecture.md]
+    A --> B{REST blocking or reactive?}
     B -->|Blocking MVC + JDBC/JPA| C[spring-boot-4.md + spring-framework-7.md]
     B -->|Reactive WebFlux + R2DBC| D[spring-boot-4.md Reactive section + spring-framework-7.md]
     A --> E{Modular monolith?}
@@ -93,6 +97,8 @@ Load these as needed — do not load all at once:
 | MongoDB | `references/spring-data-mongodb.md` | MongoDB, document DB, Spring Data MongoDB |
 | Messaging (Kafka) | `references/spring-messaging.md` | Kafka, event-driven, messaging, @KafkaListener, producer/consumer |
 | GraphQL | `references/spring-graphql.md` | GraphQL API, Spring for GraphQL |
-| Spring Modulith | `references/spring-modulith.md` | Domain-driven module design, event-driven architecture |
+| Spring Modulith | `references/spring-modulith.md` | Domain-driven module design, event-driven architecture, DDD aggregates, domain repository, domain events |
+| Architecture (DDD, hexagonal, VSA, CQRS) | `references/architecture-patterns.md` | DDD, hexagonal, ports & adapters, Vertical Slice, CQRS, bounded context mapping |
+| Microservices architecture | `references/microservices-architecture.md` | Microservices design, service boundaries, inter-service communication, API Gateway, distributed tracing |
 | Build templates | `references/build-templates.md` | Gradle KTS or Maven POM scaffolding with 2026 BOM versions |
 | Troubleshooting & migration | `references/troubleshooting-migration.md` | Migration from Boot 3, compile/runtime errors (javax/jakarta, RestTemplate, native, null-safety) |

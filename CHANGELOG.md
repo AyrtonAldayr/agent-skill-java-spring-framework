@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0] - 2026-02-21
+
+### Added
+
+- **Skill:** New references `architecture-patterns.md` (hexagonal, Vertical Slice, DDD mapping to Modulith, CQRS) and `microservices-architecture.md` (microservices vs Modulith, service boundaries, inter-service communication, API Gateway, distributed observability).
+- **Skill:** spring-modulith.md new section 10 "DDD & Modulith" (aggregate, domain repository, domain vs application events).
+- **Skill:** SKILL.md and README: reference table and Quick decision mermaid updated for architecture and microservices.
+
+[1.5.0]: https://github.com/AyrtonAldayr/agent-skill-java-spring-framework/compare/v1.4.0...v1.5.0
+
 ## [1.4.0] - 2026-02-21
 
 ### Added
