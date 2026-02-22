@@ -16,6 +16,32 @@ description: >
 You are a Senior Java & Spring Boot 4 / Spring Framework 7 architect. All code must be
 idiomatic for **2026 standards**: Spring Boot 4.0.x, Spring Framework 7.0.x, Java 25, Jakarta EE 11.
 
+**Triggers:** REST APIs, microservices, JdbcClient/JPA 3.2/R2DBC, WebFlux, Spring Security 7, observability, GraalVM native, Gradle/Maven, Jakarta EE 11 migration, Java 25 (records, sealed classes, structured concurrency, scoped values, JSpecify).
+
+## When NOT to use this skill
+
+- Legacy Spring Boot 2.x or 3.x with no upgrade plan to Boot 4 / Framework 7.
+- Non-Spring JVM stacks (Quarkus, Micronaut, Helidon) unless the user explicitly asks for Spring comparison or migration.
+- Tasks that do not touch Java/Spring backend (e.g. only frontend, only infra/DevOps with no Spring code).
+- General Java questions with no Spring or framework context.
+
+## Quick decision (which reference to load first)
+
+```mermaid
+flowchart TD
+    A[User request] --> B{REST blocking or reactive?}
+    B -->|Blocking MVC + JDBC/JPA| C[spring-boot-4.md + spring-framework-7.md]
+    B -->|Reactive WebFlux + R2DBC| D[spring-boot-4.md Reactive section + spring-framework-7.md]
+    A --> E{Modular monolith?}
+    E -->|Yes| F[spring-modulith.md]
+    A --> G{Security / OAuth2 / JWT?}
+    G -->|Yes| H[spring-security-7.md]
+    A --> I{Scaffold / build / versions?}
+    I -->|Yes| J[build-templates.md]
+    A --> K{Migration or errors?}
+    K -->|Yes| L[troubleshooting-migration.md]
+```
+
 ## Mandatory Workflow
 
 1. **Analyze** — Check if the feature exists natively in Spring 7 before adding a library.
@@ -52,5 +78,7 @@ Load these as needed — do not load all at once:
 |---|---|---|
 | Spring Framework 7 APIs | `references/spring-framework-7.md` | Framework-level features: versioning, resilience, JSpecify, SpEL, streaming |
 | Spring Boot 4 features | `references/spring-boot-4.md` | Boot auto-config, Actuator, native images, testing, virtual threads |
+| Spring Security 7 | `references/spring-security-7.md` | OAuth2 Resource Server, JWT, method security, CORS, authentication/authorization |
 | Spring Modulith | `references/spring-modulith.md` | Domain-driven module design, event-driven architecture |
 | Build templates | `references/build-templates.md` | Gradle KTS or Maven POM scaffolding with 2026 BOM versions |
+| Troubleshooting & migration | `references/troubleshooting-migration.md` | Migration from Boot 3, compile/runtime errors (javax/jakarta, RestTemplate, native, null-safety) |

@@ -2,6 +2,8 @@
 
 **Version**: 7.0.5 (Stable) | **Java baseline**: 17 (25 recommended) | **Jakarta EE**: 11
 
+For **reactive applications (WebFlux + R2DBC)**, combine this reference with the **Reactive stack** section in `references/spring-boot-4.md`.
+
 ---
 
 ## Table of Contents

@@ -13,6 +13,7 @@
 6. [Transactional Event Listeners](#6-transactional-event-listeners)
 7. [Module Integration Testing](#7-module-integration-testing)
 8. [Generating Documentation](#8-generating-documentation)
+9. [Common Pitfalls](#9-common-pitfalls)
 
 ---
 
@@ -218,3 +219,15 @@ void generateModuleDocumentation() throws Exception {
 ```
 
 Output lands in `target/spring-modulith-docs/` (Maven) or `build/spring-modulith-docs/` (Gradle).
+
+---
+
+## 9. Common Pitfalls
+
+| Pitfall | Remedy |
+|--------|--------|
+| **Circular module dependencies** | `ApplicationModules.of(...).verify()` fails. Break the cycle: introduce a shared module or move the coupling to events so no module depends on the other. |
+| **Exposing internal types in the module API** | Public classes in the module root (e.g. `OrderService`) must not return or accept types from `internal/`. Use DTOs or domain types in the public package only. |
+| **Forgetting the verification test in CI** | Add the module verification test (section 3) to your CI pipeline so boundary violations are caught on every commit. |
+| **Direct service calls across modules** | One module must not inject another module's service and call it directly. Use `ApplicationEventPublisher` and `@ApplicationModuleListener` (or transactional events) for cross-module communication. |
+| **Putting shared DTOs in one module's internal** | Types used in events or APIs consumed by several modules belong in a `shared/` (or similar) package, not in one module's `internal/`. |

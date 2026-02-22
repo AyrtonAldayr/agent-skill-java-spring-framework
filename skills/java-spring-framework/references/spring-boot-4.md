@@ -15,6 +15,7 @@
 8. [Scoped Values (Java 25)](#8-scoped-values-java-25)
 9. [Docker Compose Support](#9-docker-compose-support)
 10. [Spring Security 7 Basics](#10-spring-security-7-basics)
+11. [Reactive Stack (R2DBC + WebFlux)](#11-reactive-stack-r2dbc--webflux)
 
 ---
 
@@ -126,11 +127,55 @@ class UserRepositoryTest {
 }
 ```
 
+### Testcontainers (integration tests)
+
+For full integration tests against a real database, use **Testcontainers**. Prefer this when testing repository logic, transactions, or schema; use `@MockBean` for unit/slice tests where the focus is the controller or service in isolation.
+
+```kotlin
+// build.gradle.kts
+testImplementation("org.springframework.boot:spring-boot-testcontainers")
+testImplementation("org.testcontainers:postgresql")
+testImplementation("org.testcontainers:junit-jupiter")
+```
+
+```java
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@Testcontainers
+class OrderRepositoryIntegrationTest {
+
+    @Container
+    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:17")
+        .withDatabaseName("testdb").withUsername("test").withPassword("test");
+
+    @DynamicPropertySource
+    static void props(DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.url", postgres::getJdbcUrl);
+        registry.add("spring.datasource.username", postgres::getUsername);
+        registry.add("spring.datasource.password", postgres::getPassword);
+    }
+
+    @Autowired OrderRepository repository;
+
+    @Test
+    void shouldFindOrdersByUserId() {
+        // real DB; no mocks
+        List<Order> orders = repository.findByUserId("user-1");
+        assertThat(orders).isNotEmpty();
+    }
+}
+```
+
+**When to use @MockBean vs Testcontainers:** Use `@MockBean` in `@WebMvcTest` or `@DataJpaTest` when you want fast, isolated tests. Use Testcontainers when you need real DB/network behavior (transactions, constraints, SQL).
+
 ---
 
 ## 4. Actuator & Observability
 
 Spring Boot 4 ships first-class **Micrometer Tracing + OpenTelemetry** support.
+
+### Endpoint exposure (secure by default)
+
+Expose only what you need. In production, prefer `health` and `info` for public checks; restrict `metrics`, `prometheus`, and `traces` to an internal network or secure endpoint (e.g. via Spring Security).
 
 ```yaml
 # application.yaml
@@ -138,7 +183,11 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,info,metrics,prometheus,traces
+        include: health,info,metrics,prometheus,traces   # restrict in prod
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: when-authorized   # or "never" in prod
   tracing:
     sampling:
       probability: 1.0
@@ -150,13 +199,17 @@ management:
       endpoint: http://otel-collector:4318/v1/traces
 ```
 
+Protect actuator in Security 7: allow `health`/`info` for load balancers, require authentication for `metrics`/`prometheus`/`traces`. See `references/spring-security-7.md`.
+
+### Dependencies (Micrometer + OTEL)
+
 ```kotlin
 // build.gradle.kts
 implementation("io.micrometer:micrometer-tracing-bridge-otel")
 implementation("io.opentelemetry:opentelemetry-exporter-otlp")
 ```
 
-Custom span:
+### Custom span (Tracer)
 
 ```java
 @Service
@@ -318,7 +371,7 @@ No manual connection properties needed — Boot auto-configures `DataSource` and
 
 ## 10. Spring Security 7 Basics
 
-Lambda DSL is the only supported style in Spring Security 7.
+Spring Security 7 uses **lambda DSL** only for `SecurityFilterChain` and related config. Minimal example:
 
 ```java
 @Configuration
@@ -332,10 +385,8 @@ public class SecurityConfig {
                 .requestMatchers("/api/public/**").permitAll()
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated())
-            .oauth2ResourceServer(oauth2 -> oauth2
-                .jwt(jwt -> jwt.decoder(jwtDecoder())))
-            .sessionManagement(session -> session
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.decoder(jwtDecoder())))
+            .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .build();
     }
 
@@ -345,3 +396,28 @@ public class SecurityConfig {
     }
 }
 ```
+
+For **OAuth2 Resource Server (JWT)**, **method security (`@PreAuthorize`)**, and **CORS**, load `references/spring-security-7.md`.
+
+---
+
+## 11. Reactive Stack (R2DBC + WebFlux)
+
+Choose the reactive stack when you need non-blocking I/O end-to-end (high concurrency, streaming, or integration with reactive drivers). For typical CRUD APIs with blocking JDBC/JPA, prefer **Spring MVC + virtual threads** (section 6).
+
+### Dependencies
+
+```kotlin
+// build.gradle.kts — replace or add to starters
+implementation("org.springframework.boot:spring-boot-starter-webflux")
+implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
+runtimeOnly("org.postgresql:r2dbc-postgresql")
+```
+
+### Main application
+
+Use `Netty` as the default server (Boot chooses it when `spring-boot-starter-webflux` is on the classpath and `spring-boot-starter-web` is not).
+
+### R2DBC repositories and WebFlux controllers
+
+Define reactive repositories (`ReactiveCrudRepository`) and inject them into `@RestController` or handler functions. Use `ServerWebExchange`, `Mono`, and `Flux` for reactive types. For **RestClient** in a reactive app, use the reactive variant and streaming; see `references/spring-framework-7.md` (Streaming Support) for alignment with Spring 7 APIs.
