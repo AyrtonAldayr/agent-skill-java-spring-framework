@@ -164,9 +164,11 @@ Once installed, Claude Code acts as a **Senior Spring Boot 4 architect**:
 
 ## Publishing to npm
 
+We use [Semantic Versioning](https://semver.org/): **MAJOR.MINOR.PATCH**. Small changes (docs, config, bugfixes) = **patch** (e.g. `1.6.0` → `1.6.1`). New features = **minor** (`1.6.0` → `1.7.0`). Breaking changes = **major** (`1.6.0` → `2.0.0`).
+
 When releasing a new version:
 
-1. **Bump version** in `package.json` (e.g. `1.5.0` → `1.6.0`).
+1. **Bump version** in `package.json` (e.g. `1.6.0` → `1.6.1` for patch, or `1.7.0` for minor).
 2. **Update CHANGELOG.md** — add an entry under the new version (Added / Changed / Fixed).
 3. **Commit, tag and push:**
    ```bash
