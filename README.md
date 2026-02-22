@@ -135,7 +135,7 @@ Once installed, Claude Code acts as a **Senior Spring Boot 4 architect**:
 |---|---|
 | `skills/java-spring-framework/references/spring-framework-7.md` | All Spring 7 APIs, Bean Validation, @Valid |
 | `skills/java-spring-framework/references/spring-boot-4.md` | Boot 4: native, virtual threads, testing, reactive stack, rate limiting, connection pools, caching, performance, OpenAPI, scheduling |
-| `skills/java-spring-framework/references/spring-security-7.md` | OAuth2 Resource Server, JWT, method security, CORS |
+| `skills/java-spring-framework/references/spring-security-7.md` | OAuth2 Resource Server, JWT, method security, CORS, Keycloak |
 | `skills/java-spring-framework/references/spring-redis.md` | Redis, cache distribuido, session store |
 | `skills/java-spring-framework/references/spring-data-mongodb.md` | MongoDB, document DB, Spring Data MongoDB |
 | `skills/java-spring-framework/references/spring-messaging.md` | Kafka, event-driven, @KafkaListener, producer/consumer |

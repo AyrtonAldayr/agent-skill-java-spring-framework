@@ -94,7 +94,7 @@ Load these as needed — do not load all at once:
 |---|---|---|
 | Spring Framework 7 APIs | `references/spring-framework-7.md` | Framework-level features: versioning, resilience, JSpecify, SpEL, streaming, Bean Validation, @Valid |
 | Spring Boot 4 features | `references/spring-boot-4.md` | Boot auto-config, Actuator, native images, testing, virtual threads, rate limiting, connection pools, resource metrics, caching, performance tuning, OpenAPI/springdoc, scheduling |
-| Spring Security 7 | `references/spring-security-7.md` | OAuth2 Resource Server, JWT, method security, CORS, authentication/authorization |
+| Spring Security 7 | `references/spring-security-7.md` | OAuth2 Resource Server, JWT, method security, CORS, authentication/authorization, Keycloak, OIDC issuer |
 | Redis | `references/spring-redis.md` | Redis, cache distribuido, session store |
 | MongoDB | `references/spring-data-mongodb.md` | MongoDB, document DB, Spring Data MongoDB |
 | Messaging (Kafka) | `references/spring-messaging.md` | Kafka, event-driven, messaging, @KafkaListener, producer/consumer |

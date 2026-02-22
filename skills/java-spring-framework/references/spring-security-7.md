@@ -12,6 +12,7 @@
 4. [Method Security (@PreAuthorize)](#4-method-security-preauthorize)
 5. [CORS](#5-cors)
 6. [application.yaml](#6-applicationyaml)
+7. [Integration with Keycloak](#7-integration-with-keycloak)
 
 ---
 
@@ -200,4 +201,28 @@ For **development only**, you can disable security (e.g. with a `SecurityFilterC
 
 ---
 
-**Summary:** Use `SecurityFilterChain` with lambda DSL, OAuth2 Resource Server with JWT for APIs, `@EnableMethodSecurity` and `@PreAuthorize` for method-level rules, and configure CORS in the security pipeline when the API is consumed by a browser client.
+## 7. Integration with Keycloak
+
+**Keycloak** is an OAuth2/OIDC identity provider. Your Spring Boot app acts as a **Resource Server** and validates JWTs issued by Keycloak; you do not implement the authorization server in the app. The same `SecurityFilterChain` and OAuth2 Resource Server setup (sections 2–3) apply; only the configuration of the issuer changes.
+
+**issuer-uri for Keycloak:** Use the realm URL as the issuer. Format: `https://<keycloak-host>/realms/<realm-name>`. Spring Boot discovers the JWK Set from that issuer’s OIDC well-known metadata.
+
+```yaml
+# application.yaml — Keycloak realm as issuer
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://auth.acme.com/realms/myapp
+          # Optional: validate audience (e.g. Keycloak client ID or resource)
+          # audiences: my-backend-api
+```
+
+If your Keycloak client or resource is configured to emit an `aud` claim, set `jwt.audiences` to the expected value(s) so that Spring Security validates audience in addition to signature and expiry.
+
+For **browser-based login** (OAuth2 Client / OIDC login) with Keycloak, use `spring-boot-starter-oauth2-client` and configure `spring.security.oauth2.client.provider.keycloak` and a client registration; that is separate from the Resource Server (JWT) setup described here.
+
+---
+
+**Summary:** Use `SecurityFilterChain` with lambda DSL, OAuth2 Resource Server with JWT for APIs, `@EnableMethodSecurity` and `@PreAuthorize` for method-level rules, and configure CORS in the security pipeline when the API is consumed by a browser client. For Keycloak as the authorization server, use section 7 (issuer-uri per realm, optional audience).
