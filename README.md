@@ -1,7 +1,7 @@
 # Spring Boot 4 · Java 25 · Spring Framework 7
 
 > **2026-standard** project scaffolder + Claude Code AI skill for Java / Spring development.
-> By [AyrtonAldayr](https://github.com/AyrtonAldayr)
+> By [AyrtonAldayr](https://github.com/AyrtonAldayr) · **v1.1.0**
 
 This repository provides two tools in one:
 
@@ -112,9 +112,11 @@ Once installed, Claude Code acts as a **Senior Spring Boot 4 architect**:
 | File | Contents |
 |---|---|
 | `skills/java-spring-framework/references/spring-framework-7.md` | All Spring 7 APIs with code examples |
-| `skills/java-spring-framework/references/spring-boot-4.md` | Boot 4 features: native, virtual threads, Security 7, testing |
-| `skills/java-spring-framework/references/spring-modulith.md` | Module structure, events, integration testing |
+| `skills/java-spring-framework/references/spring-boot-4.md` | Boot 4: native, virtual threads, testing (Testcontainers), reactive stack |
+| `skills/java-spring-framework/references/spring-security-7.md` | OAuth2 Resource Server, JWT, method security, CORS |
+| `skills/java-spring-framework/references/spring-modulith.md` | Module structure, events, integration testing, common pitfalls |
 | `skills/java-spring-framework/references/build-templates.md` | Complete Gradle KTS + Maven POM templates |
+| `skills/java-spring-framework/references/troubleshooting-migration.md` | Common errors (javax/jakarta, RestTemplate), Boot 3→4 checklist |
 
 ---
 
