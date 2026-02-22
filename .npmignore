@@ -1,0 +1,26 @@
+# Dependencies and local npm
+node_modules/
+.npm
+npm-debug.log*
+
+# Version control and local config
+.git/
+.gitignore
+.cursor/
+.claude/
+.agents/
+
+# Packed skill artifact (not the npm package)
+*.skill
+
+# IDE and OS
+.idea/
+*.iml
+.vscode/
+.DS_Store
+Thumbs.db
+*.swp
+
+# Plans and agent transcripts (repo-only)
+*.plan.md
+agent-transcripts/
